@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
+const BASE_URL = 'https://notes-app-backend-1ll4.onrender.com/api/notes';
+
 const App = () => {
   const [notes, setNotes] = useState([]);
   const [title, setTitle] = useState('');
@@ -10,25 +12,25 @@ const App = () => {
   const [editContent, setEditContent] = useState('');
 
   useEffect(() => {
-    axios.get('http://localhost:3000/api/notes')
+    axios.get(BASE_URL)
       .then(res => setNotes(res.data))
       .catch(err => console.log(err));
   }, []);
 
   const createNote = async () => {
-    const res = await axios.post('http://localhost:3000/api/notes', { title, content });
+    const res = await axios.post(BASE_URL, { title, content });
     setNotes([...notes, res.data.note]);
     setTitle('');
     setContent('');
   };
 
   const deleteNote = async (id) => {
-    await axios.delete(`http://localhost:3000/api/notes/${id}`);
+    await axios.delete(`${BASE_URL}/${id}`);
     setNotes(notes.filter(note => note._id !== id));
   };
 
   const updateNote = async (id) => {
-    const res = await axios.put(`http://localhost:3000/api/notes/${id}`, {
+    const res = await axios.put(`${BASE_URL}/${id}`, {
       title: editTitle,
       content: editContent
     });
